@@ -1,0 +1,11 @@
+<form [formGroup]="form" (ngSubmit)="handleSubmit()">
+  <div>
+    <div class="flex flex-col gap-2">
+      <label for="name">Name</label>
+      <input pInputText id="name" formControlName="name" />
+    </div>
+    <div class="flex justify-end mt-4">
+      <p-button type="submit">Submit</p-button>
+    </div>
+  </div>
+</form>
