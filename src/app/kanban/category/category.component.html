@@ -1,0 +1,34 @@
+<div
+  pDroppable
+  (onDrop)="handleTaskDropped()"
+  class="w-96 select-none flex flex-col p-4 bg-[--p-panel-background] rounded gap-4"
+  [style]="{ borderLeft: '5px solid ' + data.color }"
+>
+  <h2 class="text-2xl font-bold">{{ data.name }}</h2>
+  <ul class="flex flex-col gap-2">
+    <ng-container *ngIf="!isLoading; else loading">
+      <li *ngFor="let task of tasks"><task [data]="task"></task></li>
+    </ng-container>
+    <ng-template #loading>
+      <li *ngFor="let _ of [1, 2, 3]">
+        <p-skeleton width="100%" height="10rem"></p-skeleton>
+      </li>
+    </ng-template>
+  </ul>
+  <span class="flex justify-between items-center w-full">
+    <span class="cursor-pointer" (click)="handleAddTask()"
+      ><i class="pi pi-plus"></i> Add Task</span
+    >
+    <i
+      class="pi pi-ellipsis-v cursor-pointer"
+      pTooltip="Options"
+      showDelay="300"
+      hideDelay="100"
+      (click)="op.toggle($event)"
+    >
+      <p-popover #op>
+        <p-menu [model]="menuItems" styleClass="border-0" />
+      </p-popover>
+    </i>
+  </span>
+</div>

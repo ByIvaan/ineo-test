@@ -1,26 +1,25 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { FloatLabel } from 'primeng/floatlabel';
+import { Component } from '@angular/core';
 import {
   FormBuilder,
-  FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
+import { ColorPicker } from 'primeng/colorpicker';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { CreateCategoryModel } from '../../../services/categories.service';
+import { InputTextModule } from 'primeng/inputtext';
+import { UpsertCategoryModel } from '../../../services/categories.service';
 
 @Component({
-  selector: 'new-category-dialog-component',
+  selector: 'upsert-category-dialog-component',
   standalone: true,
-  templateUrl: './new-category-dialog.component.html',
-  imports: [InputTextModule, ButtonModule, FloatLabel, ReactiveFormsModule],
+  templateUrl: './upsert-category-dialog.component.html',
+  imports: [InputTextModule, ButtonModule, ReactiveFormsModule, ColorPicker],
 })
 export class NewCategoryDialogComponent {
   form: FormGroup;
-  onSubmit: (payload: CreateCategoryModel) => void = () => {};
+  onSubmit: (payload: UpsertCategoryModel) => void = () => {};
 
   constructor(
     private fb: FormBuilder,
@@ -29,9 +28,13 @@ export class NewCategoryDialogComponent {
   ) {
     this.form = this.fb.group({
       name: ['', Validators.required],
+      color: ['#000000'], // default color,
     });
     if (this.config.data && typeof this.config.data.onSubmit === 'function') {
       this.onSubmit = this.config.data.onSubmit;
+    }
+    if (this.config.data && this.config.data.category) {
+      this.form.patchValue(this.config.data.category);
     }
   }
 

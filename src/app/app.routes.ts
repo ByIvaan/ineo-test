@@ -1,4 +1,11 @@
 import { Routes } from '@angular/router';
-import { TasksListComponent } from './tasks-list/tasks-list.component';
+import { TaskListComponent } from './task-list/task-list.component';
+import { KanbanComponent } from './kanban/kanban.component';
 
-export const routes: Routes = [{ path: '', component: TasksListComponent }];
+export const routes: Routes = [
+  { path: '', component: KanbanComponent },
+  {
+    path: 'task-list',
+    component: TaskListComponent,
+  },
+];

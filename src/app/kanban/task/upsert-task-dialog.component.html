@@ -1,0 +1,28 @@
+<form [formGroup]="form" (ngSubmit)="handleSubmit()">
+  <div>
+    <div class="flex flex-col gap-2">
+      <label for="title">Title</label>
+      <input pInputText id="title" formControlName="title" />
+    </div>
+    <div class="flex flex-col gap-2">
+      <label for="categoryId">Category</label>
+      <p-select
+        [loading]="isCategoriesLoading"
+        formControlName="categoryId"
+        [options]="categories"
+        optionLabel="name"
+        optionValue="id"
+        placeholder="Select a Category"
+        class="w-full"
+      />
+    </div>
+    <div class="flex flex-col gap-2">
+      <label for="description">Description</label>
+      <textarea pTextarea id="description" formControlName="description">
+      </textarea>
+    </div>
+    <div class="flex justify-end mt-4">
+      <p-button type="submit">Submit</p-button>
+    </div>
+  </div>
+</form>

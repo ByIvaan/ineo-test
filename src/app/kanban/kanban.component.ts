@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, OnInit } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { InplaceModule } from 'primeng/inplace';
@@ -8,17 +8,19 @@ import { FormsModule } from '@angular/forms';
 import { AutoFocusModule } from 'primeng/autofocus';
 import { CategoryComponent } from './category/category.component';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { NewCategoryDialogComponent } from './category/new-category-dialog.component';
+import { NewCategoryDialogComponent } from './category/upsert-category-dialog.component';
 import { Category } from '../../interfaces/category.interface';
 import {
   CategoriesService,
-  CreateCategoryModel,
+  UpsertCategoryModel,
 } from '../../services/categories.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Skeleton } from 'primeng/skeleton';
 
 @Component({
-  selector: 'tasks-list',
+  selector: 'kanban',
   standalone: true,
-  templateUrl: './tasks-list.component.html',
+  templateUrl: './kanban.component.html',
   imports: [
     CommonModule,
     FormsModule,
@@ -28,29 +30,45 @@ import {
     InputTextModule,
     AutoFocusModule,
     CategoryComponent,
+    Skeleton,
   ],
   providers: [DialogService],
 })
-export class TasksListComponent implements OnInit {
+export class KanbanComponent implements OnInit {
   ref: DynamicDialogRef | undefined;
   categories: Category[] = [];
+  isLoading = false;
 
   constructor(
     public categoriesService: CategoriesService,
-    public dialogService: DialogService
+    public dialogService: DialogService,
+    private destroyRef: DestroyRef
   ) {}
 
   ngOnInit() {
-    this.categoriesService.getAll().subscribe((categories) => {
-      this.categories = categories;
-      console.log(this.categories);
-    });
+    this.loadCategories();
 
-    this.categoriesService.onDataMutation$.subscribe(() => {
-      this.categoriesService.getAll().subscribe((categories) => {
-        this.categories = categories;
+    this.categoriesService.onDataMutation$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.loadCategories();
       });
-    });
+  }
+
+  loadCategories() {
+    this.isLoading = true;
+    this.categoriesService
+      .getAll$()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (categories) => {
+          this.categories = categories;
+          this.isLoading = false;
+        },
+        error: () => {
+          this.isLoading = false;
+        },
+      });
   }
 
   handleAddCategory() {
@@ -61,13 +79,13 @@ export class TasksListComponent implements OnInit {
       dismissableMask: true,
       width: '32rem',
       data: {
-        onSubmit: (payload: CreateCategoryModel) =>
+        onSubmit: (payload: UpsertCategoryModel) =>
           this.handleAddCategorySubmit(payload),
       },
     });
   }
 
-  handleAddCategorySubmit(payload: CreateCategoryModel) {
-    this.categoriesService.create(payload).subscribe();
+  handleAddCategorySubmit(payload: UpsertCategoryModel) {
+    this.categoriesService.create$(payload).subscribe();
   }
 }

@@ -1,0 +1,123 @@
+<p-table
+  [value]="tasks"
+  stripedRows
+  [loading]="isLoading"
+  [globalFilterFields]="['title', 'description']"
+  showLoader="false"
+  styleClass="min-w-64 w-full"
+  [paginator]="true"
+  [rows]="15"
+  [rowsPerPageOptions]="[5, 15, 30, 60]"
+>
+  <ng-template pTemplate="caption">
+    <div class="flex items-center justify-between">
+      <span class="text-xl font-bold"
+        >Tasks ({{ tasks ? tasks.length : 0 }})</span
+      >
+      <p-button icon="pi pi-refresh" (onClick)="handleRefresh()" />
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th pSortableColumn="title">Title <p-sortIcon field="title" /></th>
+      <th pSortableColumn="categoryId">
+        Category <p-sortIcon field="categoryId" />
+      </th>
+      <th pSortableColumn="description">
+        Description <p-sortIcon field="description" />
+      </th>
+      <th>Actions</th>
+    </tr>
+    <tr>
+      <th>
+        <p-columnFilter
+          type="text"
+          matchMode="contains"
+          field="title"
+          placeholder="Search by title"
+          ariaLabel="Filter Title"
+        ></p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter field="categoryId" matchMode="in" [showMenu]="false">
+          <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+            <p-multiselect
+              [(ngModel)]="filterCategories"
+              [options]="categories"
+              placeholder="Search by category"
+              (onChange)="filter(filterCategories)"
+              optionLabel="name"
+              optionValue="id"
+              styleClass="min-w-[12rem]"
+              appendTo="body"
+            >
+            </p-multiselect>
+          </ng-template>
+        </p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter
+          type="text"
+          matchMode="contains"
+          field="description"
+          placeholder="Search by description"
+          ariaLabel="Filter description"
+        ></p-columnFilter>
+      </th>
+      <th></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="loadingbody">
+    <tr>
+      <td><p-skeleton height="2rem"></p-skeleton></td>
+      <td><p-skeleton height="2rem"></p-skeleton></td>
+      <td><p-skeleton height="2rem"></p-skeleton></td>
+      <td><p-skeleton height="2rem"></p-skeleton></td>
+    </tr>
+    <tr>
+      <td><p-skeleton height="2rem"></p-skeleton></td>
+      <td><p-skeleton height="2rem"></p-skeleton></td>
+      <td><p-skeleton height="2rem"></p-skeleton></td>
+      <td><p-skeleton height="2rem"></p-skeleton></td>
+    </tr>
+    <tr>
+      <td><p-skeleton height="2rem"></p-skeleton></td>
+      <td><p-skeleton height="2rem"></p-skeleton></td>
+      <td><p-skeleton height="2rem"></p-skeleton></td>
+      <td><p-skeleton height="2rem"></p-skeleton></td>
+    </tr>
+    <tr>
+      <td><p-skeleton height="2rem"></p-skeleton></td>
+      <td><p-skeleton height="2rem"></p-skeleton></td>
+      <td><p-skeleton height="2rem"></p-skeleton></td>
+      <td><p-skeleton height="2rem"></p-skeleton></td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-task>
+    <tr *ngIf="!isLoading">
+      <td>{{ task.title }}</td>
+      <td>
+        <p-tag
+          *ngIf="task.category"
+          [value]="task.category?.name"
+          [style]="{
+            backgroundColor: task.category?.color,
+            color: task.category?.color | contrastColor
+          }"
+        />
+      </td>
+      <td>{{ task.description }}</td>
+      <td>
+        <p-button
+          icon="pi pi-pencil"
+          (onClick)="handleEditTask(task)"
+          class="mr-2"
+        />
+        <p-button
+          icon="pi pi-trash"
+          (onClick)="handleDeleteTask($event, task)"
+        />
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

@@ -3,8 +3,9 @@ import { Category } from '../interfaces/category.interface';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject, tap } from 'rxjs';
 
-export interface CreateCategoryModel {
+export interface UpsertCategoryModel {
   name: string;
+  color?: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -13,11 +14,11 @@ export class CategoriesService {
 
   constructor(private httpClient: HttpClient) {}
 
-  getAll(): Observable<Category[]> {
+  getAll$(): Observable<Category[]> {
     return this.httpClient.get<Category[]>('/categories');
   }
 
-  create(category: CreateCategoryModel): Observable<Category> {
+  create$(category: UpsertCategoryModel): Observable<Category> {
     return this.httpClient.post<Category>('/categories', category).pipe(
       tap(() => {
         this.onDataMutation$.next();
@@ -25,7 +26,7 @@ export class CategoriesService {
     );
   }
 
-  update(category: Category): Observable<Category> {
+  update$(category: Category): Observable<Category> {
     return this.httpClient
       .put<Category>(`/categories/${category.id}`, category)
       .pipe(
@@ -33,5 +34,13 @@ export class CategoriesService {
           this.onDataMutation$.next();
         })
       );
+  }
+
+  delete$(category: Category): Observable<void> {
+    return this.httpClient.delete<void>(`/categories/${category.id}`).pipe(
+      tap(() => {
+        this.onDataMutation$.next();
+      })
+    );
   }
 }

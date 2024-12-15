@@ -1,0 +1,25 @@
+<div class="w-full flex justify-between items-center mb-4">
+  <p-button (onClick)="handleAddCategory()">Add Category</p-button>
+</div>
+<div class="flex flex-col md:flex-row gap-4">
+  <ng-container *ngIf="!isLoading; else loading">
+    <category [data]="category" *ngFor="let category of categories"></category>
+  </ng-container>
+  <ng-template #loading>
+    <p-skeleton
+      width="24rem"
+      height="30rem"
+      styleClass="bg-gray-300"
+    ></p-skeleton>
+    <p-skeleton
+      width="24rem"
+      height="60rem"
+      styleClass="bg-gray-300"
+    ></p-skeleton>
+    <p-skeleton
+      width="24rem"
+      height="50rem"
+      styleClass="bg-gray-300"
+    ></p-skeleton>
+  </ng-template>
+</div>
