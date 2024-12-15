@@ -28,13 +28,12 @@ import {
   CategoriesService,
   UpsertCategoryModel,
 } from '../../../services/categories.service';
-import { NewCategoryDialogComponent as UpsertCategoryDialogComponent } from './upsert-category-dialog.component';
+import { UpsertCategoryDialogComponent } from './upsert-category-dialog.component';
 
 @Component({
   selector: 'category',
   standalone: true,
   templateUrl: './category.component.html',
-  styleUrls: ['./category.component.scss'],
   imports: [
     CommonModule,
     PanelModule,

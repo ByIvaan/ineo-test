@@ -17,7 +17,7 @@ import { UpsertCategoryModel } from '../../../services/categories.service';
   templateUrl: './upsert-category-dialog.component.html',
   imports: [InputTextModule, ButtonModule, ReactiveFormsModule, ColorPicker],
 })
-export class NewCategoryDialogComponent {
+export class UpsertCategoryDialogComponent {
   form: FormGroup;
   onSubmit: (payload: UpsertCategoryModel) => void = () => {};
 

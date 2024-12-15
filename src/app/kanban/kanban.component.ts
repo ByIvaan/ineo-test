@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { AutoFocusModule } from 'primeng/autofocus';
 import { CategoryComponent } from './category/category.component';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { NewCategoryDialogComponent } from './category/upsert-category-dialog.component';
+import { UpsertCategoryDialogComponent } from './category/upsert-category-dialog.component';
 import { Category } from '../../interfaces/category.interface';
 import {
   CategoriesService,
@@ -72,7 +72,7 @@ export class KanbanComponent implements OnInit {
   }
 
   handleAddCategory() {
-    this.ref = this.dialogService.open(NewCategoryDialogComponent, {
+    this.ref = this.dialogService.open(UpsertCategoryDialogComponent, {
       header: 'Create Category',
       closable: true,
       modal: true,
