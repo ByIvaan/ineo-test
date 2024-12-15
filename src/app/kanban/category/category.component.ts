@@ -55,7 +55,7 @@ export class CategoryComponent implements OnInit {
 
   ref: DynamicDialogRef | undefined;
   tasks: Task[] = [];
-  isLoading = false; // Added isLoading state
+  isLoading = false;
   menuItems: MenuItem[] = [];
   skeletonsLenght = Array.from({ length: 3 });
 
