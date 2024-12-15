@@ -58,6 +58,7 @@ export class CategoryComponent implements OnInit {
   tasks: Task[] = [];
   isLoading = false; // Added isLoading state
   menuItems: MenuItem[] = [];
+  skeletonsLenght = Array.from({ length: 3 });
 
   constructor(
     private tasksService: TasksService,
@@ -88,6 +89,8 @@ export class CategoryComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((update) => {
         if (this.tasks.some((task) => task.id === update.id)) {
+          this.tasks = this.tasks.filter((task) => task.id !== update.id);
+
           this.loadTasks(true);
         }
         if (update.categoryId === this.data.id) {

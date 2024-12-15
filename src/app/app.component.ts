@@ -29,10 +29,16 @@ export class AppComponent {
       { label: 'Kanban', icon: 'pi pi-objects-column', routerLink: ['/'] },
       { label: 'Task List', icon: 'pi pi-list', routerLink: ['/task-list'] },
     ];
+    const darkMode = localStorage.getItem('darkMode');
+    if (darkMode === 'true') {
+      this.toggleDarkMode();
+    }
   }
 
   toggleDarkMode() {
     const element = document.querySelector('html');
     element?.classList.toggle('dark');
+    const darkMode = element?.classList.contains('dark');
+    localStorage.setItem('darkMode', darkMode ? 'true' : 'false');
   }
 }
